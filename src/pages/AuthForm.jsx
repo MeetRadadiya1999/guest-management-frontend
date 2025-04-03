@@ -1,12 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const AuthForm = () => {
+const AuthForm = ({ setToken }) => {
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+    const navigate = useNavigate();
+  
 
   const toggleForm = () => {
     setIsSignup(!isSignup);
@@ -21,17 +24,27 @@ const AuthForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     const url = isSignup ? `${API_URL}/auth/register` : `${API_URL}/auth/login`;
-
+  
     try {
       const response = await axios.post(url, formData);
-      localStorage.setItem("token", response.data.token);
-      alert("Authentication successful!");
+  
+      if (isSignup) {
+        alert("Sign-up successful! Please log in.");
+        setIsSignup(false); // 🔹 Switch to sign-in form after sign-up
+        setFormData({ email: "", password: "" }); // 🔹 Clear input fields
+      } else {
+        localStorage.setItem("token", response.data.token);
+        setToken(response.data.token);
+        alert("Authentication successful!");
+        navigate("/dashboard", { replace: true });
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
+  
 
   return (
     <div>

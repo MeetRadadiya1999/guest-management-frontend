@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createEvent } from "../data/eventData";
+import { Link } from "react-router-dom";
 
 const CreateEvent = () => {
   const [eventData, setEventData] = useState({
@@ -33,7 +34,15 @@ const CreateEvent = () => {
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center" }}>
+         <div>
+                <Link to="/dashboard">
+                    <button style={{ background: "green", color: "white", padding: "8px 12px", border: "none", cursor: "pointer" }}>
+                      Dashboard
+                    </button>
+                </Link>
+            </div>
       <h2>Create Event</h2>
+      
       {message && <p style={{ color: "red" }}>{message}</p>}
       <form onSubmit={handleSubmit}>
         <input type="text" name="name" placeholder="Event Name" value={eventData.name} onChange={handleChange} required />
