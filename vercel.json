@@ -1,6 +1,5 @@
 {
-    "rewrites": [
-      { "source": "/rsvp/:guestId", "destination": "/" }
-    ]
-  }
-  
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
+}
