@@ -28,14 +28,22 @@ export const respondToRSVP = async (guestId, rsvpStatus) => {
 };
 
 // Fetch guests for an event
-export const getGuests = async (eventId, token) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/guests/${eventId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Error fetching guests:", error.response?.data?.message || error.message);
-        throw error;
-    }
+// export const getGuests = async (eventId, token) => {
+//     try {
+//         const response = await axios.get(`${API_BASE_URL}/guests/${eventId}`, {
+//             headers: { Authorization: `Bearer ${token}` },
+//         });
+//         return response.data;
+//     } catch (error) {
+//         console.error("Error fetching guests:", error.response?.data?.message || error.message);
+//         throw error;
+//     }
+// };
+
+
+// Fetch guest & event details
+export const getGuestDetails = async (guestId) => {
+    const res = await axios.get(`${API_BASE_URL}/guests/${guestId}`);
+    return res.data;
 };
+
