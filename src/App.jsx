@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import AuthForm from "./pages/AuthForm";
-import CreateEvent from "./pages/createEvent";
+import CreateEvent from "./pages/CreateEvent";
 import Dashboard from "./pages/Dashboard";
 import EditEvent from "./pages/EditEvent";
 import { useState, useEffect } from "react";
