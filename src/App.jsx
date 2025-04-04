@@ -6,6 +6,7 @@ import EditEvent from "./pages/EditEvent";
 import { useState, useEffect } from "react";
 import RSVPPage from "./pages/RsvpStatus";
 import EventDetails from "./components/EventDetails";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));

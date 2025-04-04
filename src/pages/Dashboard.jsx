@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getEvents, deleteEvent } from "../data/eventData";
 import { Link, useNavigate } from "react-router-dom";
+import { Container, Card, Button, ListGroup, Alert } from "react-bootstrap";
+import "./dashboard.css";
 
 const Dashboard = ({ setToken }) => {
   const [events, setEvents] = useState([]);
@@ -14,7 +16,7 @@ const Dashboard = ({ setToken }) => {
       return;
     }
     fetchEvents();
-  }, [token]); // Listen for token changes
+  }, [token]);
 
   const fetchEvents = async () => {
     try {
@@ -43,50 +45,62 @@ const Dashboard = ({ setToken }) => {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "auto", textAlign: "center" }}>
-      {/* Create Event Button */}
-      <div>
-        <Link to="/create-event">
-          <button style={{ background: "green", color: "white", padding: "8px 12px", border: "none", cursor: "pointer" }}>
-            Create Event
-          </button>
-        </Link>
-      </div>
+    <Container style={{minWidth: "100vw", height: "100vh", alignContent: "center"}}>
+        <div style={{width: "80%", margin: "0 auto", height: "80%"}}>
 
+        
       {/* Logout Button */}
-      <div>
-        <button onClick={handleLogout} style={{ background: "red", color: "white", padding: "8px 12px", border: "none", cursor: "pointer" }}>
+      <div className="d-flex justify-content-end mb-3">
+        <Button variant="danger" onClick={handleLogout}>
           Logout
-        </button>
+        </Button>
       </div>
 
-      <h2>Your Events</h2>
-      {message && <p style={{ color: "red" }}>{message}</p>}
-      {events.length === 0 ? (
-        <p>No events found. Create one!</p>
-      ) : (
-        <ul>
-          {events.map((event) => (
-            <li key={event._id} style={{ marginBottom: "10px", borderBottom: "1px solid #ccc", padding: "10px" }}>
-              <h3>{event.name}</h3>
-              <p>{event.date} at {event.time}</p>
-              <p>Location: {event.location}</p>
+      <Card className="p-4 shadow-lg" style={{height: "85%", background: "#fefefe"}}>
+        <h2 className="text-center">Your Events</h2>
+        
+        {message && <Alert variant="danger">{message}</Alert>}
 
+        {events.length === 0 ? (
+          <p className="text-center">No events found. Create one!</p>
+        ) : (
+            <div className="event-container">
+      {events.map((event) => (
+        <Card key={event._id} className="event-card">
+          <Card.Body className="text-center">
+            <Card.Title>{event.name}</Card.Title>
+            <Card.Text>
+              {event.date} at {event.time}
+              <br />
+              <strong>Location:</strong> {event.location}
+            </Card.Text>
+            <div className="d-flex justify-content-center gap-2">
               {/* View Event Button */}
               <Link to={`/event/${event._id}`}>
-                <button style={{ marginRight: "10px", background: "blue", color: "white" }}>View Event</button>
+                <Button variant="primary" size="sm">View</Button>
               </Link>
 
-              {/* Edit & Delete Buttons */}
-              <button onClick={() => navigate(`/edit-event/${event._id}`)}>Edit</button>
-              <button onClick={() => handleDelete(event._id)} style={{ marginLeft: "10px", color: "red" }}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+              {/* Edit Button */}
+              <Button variant="warning" size="sm" onClick={() => navigate(`/edit-event/${event._id}`)}>Edit</Button>
+
+              {/* Delete Button */}
+              <Button variant="danger" size="sm" onClick={() => handleDelete(event._id)}>Delete</Button>
+            </div>
+          </Card.Body>
+        </Card>
+      ))}
     </div>
+        )}
+
+        {/* Create Event Button */}
+        <div className="text-center mt-3">
+          <Link to="/create-event">
+            <Button variant="success">Create Event</Button>
+          </Link>
+        </div>
+      </Card>
+      </div>
+    </Container>
   );
 };
 

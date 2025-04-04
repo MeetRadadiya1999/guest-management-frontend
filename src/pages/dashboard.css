@@ -1,0 +1,20 @@
+.event-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    max-height: 70%;
+    overflow-y: auto;
+    padding: 10px;
+  }
+  
+  .event-card {
+    width: 250px; /* Ensures a proper size for cards */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .event-card:hover {
+    transform: scale(1.05);
+  }
+  

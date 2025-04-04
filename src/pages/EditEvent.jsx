@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { updateEvent, getEvents } from "../data/eventData";
+import { Form, Button, Container, Alert, Card } from "react-bootstrap";
+import { BsArrowLeft } from "react-icons/bs"; // Back icon
+
 
 const EditEvent = () => {
   const { id } = useParams();
@@ -53,17 +56,34 @@ const EditEvent = () => {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center" }}>
-      <h2>Edit Event</h2>
-      {message && <p style={{ color: "red" }}>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Event Name" value={eventData.name} onChange={handleChange} required />
-        <input type="date" name="date" value={eventData.date} onChange={handleChange} required />
-        <input type="time" name="time" value={eventData.time} onChange={handleChange} required />
-        <input type="text" name="location" placeholder="Location" value={eventData.location} onChange={handleChange} required />
-        <button type="submit">Update Event</button>
-      </form>
-    </div>
+    <Container className="d-flex justify-content-center align-items-center vh-100" style={{minWidth : "100vw"}}>
+      <Card className="shadow-lg" style={{ maxWidth: "500px", width: "100%", padding: "4em 1em 1em 1em" }}>
+        <Button variant="secondary" onClick={() => navigate(-1)} className="mb-3" style={{width : "", margin: "", position: "absolute", left: "5%", top: "5%"}}>
+          <BsArrowLeft /> Back
+        </Button>
+        <h2 className="text-center">Edit Event</h2>
+        {message && <Alert variant="danger">{message}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Event Name</Form.Label>
+            <Form.Control type="text" name="name" value={eventData.name} onChange={handleChange} required />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Date</Form.Label>
+            <Form.Control type="date" name="date" value={eventData.date} onChange={handleChange} required />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Time</Form.Label>
+            <Form.Control type="time" name="time" value={eventData.time} onChange={handleChange} required />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Location</Form.Label>
+            <Form.Control type="text" name="location" value={eventData.location} onChange={handleChange} required />
+          </Form.Group>
+          <Button variant="primary" type="submit" className="w-100">Update Event</Button>
+        </Form>
+      </Card>
+    </Container>
   );
 };
 
