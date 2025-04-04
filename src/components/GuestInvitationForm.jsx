@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { inviteGuest } from "../data/guestData";
+import { Spinner } from "react-bootstrap";
 
 const GuestInvitationForm = ({ eventId, token }) => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleInvite = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setMessage(""); // Clear previous messages
+
         try {
             await inviteGuest(eventId, email, token);
             setMessage("✅ Invitation sent successfully!");
             setEmail("");
-            window.location.reload(); // 🔥 Refresh the page to show updated guest list
+            window.location.reload(); // 🔥 Refresh to update the guest list
         } catch (error) {
             setMessage("❌ Failed to send invitation.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -39,17 +46,28 @@ const GuestInvitationForm = ({ eventId, token }) => {
                 />
                 <button 
                     type="submit"
+                    disabled={loading}
                     style={{
                         padding: "10px",
                         borderRadius: "5px",
                         border: "none",
-                        background: "#007bff",
+                        background: loading ? "#6c757d" : "#007bff",
                         color: "white",
                         fontSize: "16px",
-                        cursor: "pointer"
+                        cursor: loading ? "not-allowed" : "pointer",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: "8px"
                     }}
                 >
-                    Send Invitation
+                    {loading ? (
+                        <>
+                            <Spinner animation="border" size="sm" /> Sending...
+                        </>
+                    ) : (
+                        "Send Invitation"
+                    )}
                 </button>
             </form>
         </div>

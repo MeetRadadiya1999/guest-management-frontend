@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createEvent } from "../data/eventData";
 import { Link } from "react-router-dom";
-import { Card, Button, Form, Alert, Container } from "react-bootstrap";
+import { Card, Button, Form, Alert, Container, Spinner } from "react-bootstrap";
 import { BsArrowLeft } from "react-icons/bs"; // Back icon
 
 const CreateEvent = () => {
@@ -13,6 +13,7 @@ const CreateEvent = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token"); // Get token from localStorage
 
   const handleChange = (e) => {
@@ -25,17 +26,22 @@ const CreateEvent = () => {
       setMessage("User not authenticated. Please log in.");
       return;
     }
+    setLoading(true);
+    setMessage(""); // Clear previous messages
+
     try {
       const response = await createEvent(eventData, token);
       setMessage(response.message);
       setEventData({ name: "", date: "", time: "", location: "" }); // Clear form
     } catch (error) {
       setMessage(error.response?.data?.message || "Failed to create event.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container className="d-flex justify-content-center mt-5" style={{minWidth: "100vw"}}>
+    <Container className="d-flex justify-content-center mt-5" style={{ minWidth: "100vw" }}>
       <Card style={{ width: "50%", padding: "20px" }} className="shadow-lg">
         
         {/* Back to Dashboard Button */}
@@ -96,8 +102,14 @@ const CreateEvent = () => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="w-100">
-            🎉 Create Event
+          <Button variant="primary" type="submit" className="w-100" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner animation="border" size="sm" /> Creating...
+              </>
+            ) : (
+              "🎉 Create Event"
+            )}
           </Button>
         </Form>
       </Card>

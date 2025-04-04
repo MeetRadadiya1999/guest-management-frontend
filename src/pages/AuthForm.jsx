@@ -40,7 +40,7 @@ const AuthForm = ({ setToken }) => {
       } else {
         localStorage.setItem("token", response.data.token);
         setToken(response.data.token);
-        alert("Authentication successful!");
+        // alert("Authentication successful!");
         navigate("/dashboard", { replace: true });
       }
     } catch (err) {

@@ -4,12 +4,14 @@ import { getEvents } from "../data/eventData";
 import GuestInvitationForm from "./GuestInvitationForm";
 import { Container, Card, ListGroup, Alert, Spinner, Button } from "react-bootstrap";
 import { FaArrowLeft } from "react-icons/fa";
+import "./eventdetail.css";
 
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -22,22 +24,21 @@ const EventDetails = () => {
       const selectedEvent = data.find((event) => event._id === id);
       if (!selectedEvent) {
         setError("Event not found.");
-        return;
+      } else {
+        setEvent(selectedEvent);
       }
-      setEvent(selectedEvent);
     } catch (err) {
       setError("Failed to load event details.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (error) return <Alert variant="danger" className="text-center">{error}</Alert>;
-  if (!event) return <Spinner animation="border" className="d-block mx-auto mt-5" />;
-
   return (
-    <Container className="" style={{ minWidth: "100vw" }}>
+    <Container style={{ minWidth: "100vw" }}>
     
 
-      <Card className=" shadow-lg text-center" style={{ width: "50%", margin: "0 auto", padding: "4em 1em 1em 1em" }}>
+      <Card className="shadow-lg text-center event-detail-card p-4">
 
           {/* Back Button */}
       <Button
@@ -56,31 +57,41 @@ const EventDetails = () => {
       >
         <FaArrowLeft /> Back
       </Button>
-
-        <h4 style={{ background: "green", color: "white", padding: "5px", borderRadius: "8px", width: "50%", margin: "auto" }}>
-         Event : {event.name}
-        </h4>
-        <p className="text-muted m-1"><strong>Date : </strong>{event.date} at {event.time}</p>
-        <p className="m-1"><strong>Location :</strong> {event.location}</p>
-
-        <h4 className="" style={{ color: "#007bff" }}>Guest List</h4>
-        {event.guests.length > 0 ? (
-          <ListGroup className="mt-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
-            {event.guests.map((guest) => (
-              <ListGroup.Item key={guest._id} className="d-flex justify-content-between">
-                <span>Email: <strong>{guest.email}</strong></span>
-                <span>Status: <strong>{guest.rsvpStatus}</strong></span>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
+      
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "200px" }}>
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : error ? (
+          <Alert variant="danger" className="text-center">{error}</Alert>
         ) : (
-          <Alert variant="info" className="mt-2">No guests invited yet.</Alert>
-        )}
+          <>
+            <h4 style={{ background: "green", color: "white", padding: "5px", borderRadius: "8px", width: "50%", margin: "auto" }}>
+              Event: {event.name}
+            </h4>
+            <p className="text-muted m-1"><strong>Date: </strong>{event.date} at {event.time}</p>
+            <p className="m-1"><strong>Location:</strong> {event.location}</p>
 
-        {/* Guest Invitation Form */}
-        <div className="mt-2">
-          <GuestInvitationForm eventId={event._id} token={token} />
-        </div>
+            <h4 style={{ color: "#007bff" }}>Guest List</h4>
+            {event.guests.length > 0 ? (
+              <ListGroup className="mt-2" style={{ maxHeight: "200px", overflowY: "auto" }}>
+                {event.guests.map((guest) => (
+                  <ListGroup.Item key={guest._id} className="d-flex justify-content-between">
+                    <span>Email: <strong>{guest.email}</strong></span>
+                    <span>Status: <strong>{guest.rsvpStatus}</strong></span>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            ) : (
+              <Alert variant="info" className="mt-2">No guests invited yet.</Alert>
+            )}
+
+            {/* Guest Invitation Form */}
+            <div className="mt-2">
+              <GuestInvitationForm eventId={event._id} token={token} />
+            </div>
+          </>
+        )}
       </Card>
     </Container>
   );

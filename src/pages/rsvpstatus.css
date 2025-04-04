@@ -1,0 +1,11 @@
+.rsvp-card{
+     width: 50%;
+     min-height: 50% !important;
+     align-content: center;
+}
+
+@media (max-width : 768px){
+    .rsvp-card{
+        width: 100%;
+    }
+}
