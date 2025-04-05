@@ -4,20 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { Container, Card, Button, Alert, Spinner } from "react-bootstrap";
 import "./dashboard.css";
 
-const Dashboard = ({ setToken }) => {
+const Dashboard = ({ setToken,token }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token");
+//   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) {
-      navigate("/");
-      return;
-    }
+    // if (!token) {
+    //   navigate("/");
+    //   return;
+    // }
     fetchEvents();
-  }, [token]);
+  }, []);
 
   const fetchEvents = async () => {
     try {
